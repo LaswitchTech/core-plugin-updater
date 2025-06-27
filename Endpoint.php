@@ -75,36 +75,44 @@ class UpdaterEndpoint extends Endpoint {
                 // Retrieve data for the request
                 $version = $this->Config->version();
                 $releases = $this->Helper->Updater->releases();
-                $latest = $releases[array_key_first($releases)];
-                $assets = $latest['assets'];
-                $url = $latest['zipball_url'];
-                $checksum = null;
 
-                // Loop through the assets
-                foreach($assets as $asset){
-                    if($asset['name'] == $latest['tag_name'].".zip"){
-                        $url = $asset['url'];
+                // Check if the releases are available
+                if(!empty($releases)){
+                    $latest = $releases[array_key_first($releases)];
+                    $assets = $latest['assets'];
+                    $url = $latest['zipball_url'];
+                    $checksum = null;
+
+                    // Loop through the assets
+                    foreach($assets as $asset){
+                        if($asset['name'] == $latest['tag_name'].".zip"){
+                            $url = $asset['url'];
+                        }
+                        if($asset['name'] == $latest['tag_name'].".sha256"){
+                            $checksum = $asset['url'];
+                        }
                     }
-                    if($asset['name'] == $latest['tag_name'].".sha256"){
-                        $checksum = $asset['url'];
+
+                    // Set the data
+                    $message["data"]["maintenance"] = $this->Config->get('application', 'maintenance');
+                    $message["data"]["current"] = $version;
+                    $message["data"]["latest"] = $latest['tag_name'];
+                    $message["data"]["url"] = $url;
+                    $message["data"]["checksum"] = $checksum;
+                    $message["data"]["available"] = version_compare($version, $latest['tag_name'], '<');
+                    $message["data"]["message"] = '';
+
+                    // Create a message for the user
+                    if($message["data"]["available"]){
+                        $message["data"]["message"] .= $this->Locale->get("Current Version") . ": " . $version . PHP_EOL;
+                        $message["data"]["message"] .= $this->Locale->get("Latest Version") . ": " . $latest['tag_name'] . PHP_EOL;
+                    } else {
+                        $message["data"]["message"] .= $this->Locale->get("No Update Available") . PHP_EOL;
                     }
-                }
-
-                // Set the data
-                $message["data"]["maintenance"] = $this->Config->get('application', 'maintenance');
-                $message["data"]["current"] = $version;
-                $message["data"]["latest"] = $latest['tag_name'];
-                $message["data"]["url"] = $url;
-                $message["data"]["checksum"] = $checksum;
-                $message["data"]["available"] = version_compare($version, $latest['tag_name'], '<');
-                $message["data"]["message"] = '';
-
-                // Create a message for the user
-                if($message["data"]["available"]){
-                    $message["data"]["message"] .= $this->Locale->get("Current Version") . ": " . $version . PHP_EOL;
-                    $message["data"]["message"] .= $this->Locale->get("Latest Version") . ": " . $latest['tag_name'] . PHP_EOL;
                 } else {
-                    $message["data"]["message"] .= $this->Locale->get("No Update Available") . PHP_EOL;
+
+                    // Set an error message
+                    $message = ["status" => 500, "message" => "Internal Server Error", "data" => "Unable to retrieve the releases"];
                 }
             } else {
 
