@@ -334,7 +334,6 @@ class UpdaterModel extends Model {
      */
     protected function migrate(array $dictionary, string $type, string $table, string $object, ?string $column, ?string $value): array
     {
-
         // Check if the table exists
         if(isset($dictionary[$table])){
 
@@ -396,6 +395,26 @@ class UpdaterModel extends Model {
                 // Check the object to apply on
                 if($object == "table"){
                 } elseif ($object == "column") {
+
+                    // Load the table data
+                    $data = $this->load($dictionary[$table]);
+
+                    // Loop through the data
+                    foreach($data as $key => $value){
+
+                        // Log the column to be deleted
+                        $this->Log->debug("Deleting column [$column] from table [$table]");
+
+                        // Check if the column exists
+                        if(array_key_exists($column, $value)){
+
+                            // Unset the column
+                            unset($data[$key][$column]);
+                        }
+                    }
+
+                    // Save the table data
+                    $this->save($dictionary[$table], $data);
                 } elseif ($object == "data") {
 
                     // Load the table data
@@ -404,12 +423,8 @@ class UpdaterModel extends Model {
                     // Loop through the data
                     foreach($data as $key => $value){
 
-                        // Check if the column exists
-                        if(array_key_exists($column, $value)){
-
-                            // Unset the column
-                            unset($data[$key][$column]);
-                        }
+                        // Log the data to be deleted
+                        $this->Log->debug("Deleting data column [$column] from table [$table]");
 
                         // Check if the column is a wildcard *
                         if($column == "*"){
