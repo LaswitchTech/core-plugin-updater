@@ -394,6 +394,19 @@ class UpdaterModel extends Model {
 
                 // Check the object to apply on
                 if($object == "table"){
+
+                    // Log the table to be deleted
+                    $this->Log->debug("Deleting table [$table]");
+
+                    // Check if the table exists
+                    if(is_file($dictionary[$table])){
+
+                        // Delete the table
+                        unlink($dictionary[$table]);
+                    }
+
+                    // Remove the table from the dictionary
+                    unset($dictionary[$table]);
                 } elseif ($object == "column") {
 
                     // Load the table data
