@@ -1,9 +1,3 @@
-<!--
-  Core Framework - View File
-
-  @license    MIT (https://mit-license.org/)
-  @author     Full Name <user@domain.com>
--->
 <?php if($this->Auth->isAuthorized('Administrator',1)): ?>
     <!DOCTYPE html>
     <html>
@@ -253,11 +247,11 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/fetch',
+                                        url: '/api/updater/fetch',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -274,10 +268,6 @@
                                             metadata["url"] = response.url;
                                             metadata["checksum"] = response.checksum;
                                             metadata["available"] = response.available;
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -326,7 +316,7 @@
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/maintenance/on',
+                                        url: '/api/maintenance/on',
                                         type: 'GET',dataType: 'json',
                                         error: function(xhr, status, error){
 
@@ -385,11 +375,11 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/writable',
+                                        url: '/api/updater/writable',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -401,10 +391,6 @@
 
                                             // Update the metadata object
                                             metadata["writable"] = response.writable;
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -453,11 +439,11 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/backups/init',
+                                        url: '/api/backups/init',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -473,10 +459,6 @@
                                                 "file": response.file,
                                                 "uuid": response.uuid,
                                             };
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -517,14 +499,14 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["url"] = metadata["url"];
                                     data["checksum"] = metadata["checksum"];
                                     data["version"] = metadata["latest"];
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/download',
+                                        url: '/api/updater/download',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -539,10 +521,6 @@
                                                 "archive": response.archive,
                                                 "checksum": response.checksum,
                                             };
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -583,12 +561,12 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["version"] = metadata["latest"];
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/validate',
+                                        url: '/api/updater/validate',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -601,10 +579,6 @@
                                             // Update the metadata object
                                             metadata.download.checksum["valid"] = response.valid;
                                             metadata.download.checksum["checksum"] = response.checksum;
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -645,12 +619,12 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["version"] = metadata["latest"];
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/extract',
+                                        url: '/api/updater/extract',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -665,10 +639,6 @@
                                                 "path": response.path,
                                                 "archive": response.archive,
                                             };
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -709,12 +679,12 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["version"] = metadata["latest"];
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/copy',
+                                        url: '/api/updater/copy',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -723,10 +693,6 @@
                                             reject(xhr.responseText);
                                         },
                                         success: function(response) {
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -767,11 +733,11 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/dependencies',
+                                        url: '/api/updater/dependencies',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -780,10 +746,6 @@
                                             reject(xhr.responseText);
                                         },
                                         success: function(response) {
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -824,13 +786,13 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["version"] = metadata.current;
                                     data["uuid"] = metadata.backup.uuid;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/upgrade',
+                                        url: '/api/updater/upgrade',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -839,10 +801,6 @@
                                             reject(xhr.responseText);
                                         },
                                         success: function(response) {
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -883,11 +841,11 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/replace',
+                                        url: '/api/updater/replace',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -896,10 +854,6 @@
                                             reject(xhr.responseText);
                                         },
                                         success: function(response) {
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -940,12 +894,12 @@
 
                                     // Create the data object
                                     var data = {};
-                                    data[CSRF_KEY] = CSRF_TOKEN;
                                     data["uuid"] = metadata.backup.uuid;
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/updater/cleanup',
+                                        url: '/api/updater/cleanup',
+                                        headers: {'X-CSRF-Authorization': CSRF_KEY},
                                         type: 'POST',dataType: 'json',
                                         data: data,
                                         error: function(xhr, status, error){
@@ -954,10 +908,6 @@
                                             reject(xhr.responseText);
                                         },
                                         success: function(response) {
-
-                                            // Update the CSRF
-                                            CSRF_KEY = response.CSRF.key;
-                                            CSRF_TOKEN = response.CSRF.token;
 
                                             // Show the message
                                             element.find('pre').text(response.message);
@@ -998,7 +948,7 @@
 
                                     // Ajax Request
                                     $.ajax({
-                                        url: '/endpoint.php/maintenance/off',
+                                        url: '/api/maintenance/off',
                                         type: 'GET',dataType: 'json',
                                         error: function(xhr, status, error){
 
@@ -1074,7 +1024,7 @@
 
                                     // Disable maintenance mode
                                     $.ajax({
-                                        url: '/endpoint.php/maintenance/off',
+                                        url: '/api/maintenance/off',
                                         type: 'GET',dataType: 'json',
                                         success: function(response) {
 
@@ -1113,7 +1063,7 @@
 
                                     // Disable maintenance mode
                                     $.ajax({
-                                        url: '/endpoint.php/maintenance/off',
+                                        url: '/api/maintenance/off',
                                         type: 'GET',dataType: 'json',
                                         success: function(response) {
 
