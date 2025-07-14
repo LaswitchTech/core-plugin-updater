@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Core Framework - UpdaterEndpoint
- *
- * @license    MIT (https://mit-license.org/)
- * @author     Louis Ouellet <louis@laswitchtech.com>
- */
-
 // Import additionnal class into the global namespace
 use \LaswitchTech\Core\Objects;
 use \LaswitchTech\Core\Abstracts\Endpoint;
@@ -576,7 +569,7 @@ class UpdaterEndpoint extends Endpoint {
                 if($this->Helper->Composer->download()){
 
                     // Update dependencies
-                    if($this->Helper->Composer->update()){
+                    if($this->Helper->Composer->install()){
 
                         // Set the message
                         $message["data"]["message"] = $this->Locale->get("Dependencies updated");
