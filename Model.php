@@ -297,24 +297,6 @@ class UpdaterModel extends Model {
     }
 
     /**
-     * Load the file
-     *
-     * @param string $path
-     * @return array
-     */
-    protected function load(string $path): array
-    {
-        // Check if the file exists
-        if(is_file($path)){
-
-            // Load the file
-            return json_decode(file_get_contents($path), true);
-        }
-
-        return [];
-    }
-
-    /**
      * Migrate the database
      *
      * @param array $dictionary
@@ -471,6 +453,24 @@ class UpdaterModel extends Model {
     }
 
     /**
+     * Load the file
+     *
+     * @param string $path
+     * @return array
+     */
+    protected function load(string $path): array
+    {
+        // Check if the file exists
+        if(is_file($path)){
+
+            // Load the file
+            return json_decode(file_get_contents($path), true);
+        }
+
+        return [];
+    }
+
+    /**
      * Save the file
      *
      * @param string $path
@@ -489,6 +489,11 @@ class UpdaterModel extends Model {
         return false;
     }
 
+    /**
+     * Insert required data
+     *
+     * @return bool
+     */
     public function insertRequired(): bool
     {
 
