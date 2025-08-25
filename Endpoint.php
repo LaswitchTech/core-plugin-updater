@@ -358,7 +358,7 @@ class UpdaterEndpoint extends Endpoint {
                     $path = $this->Config->root() . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . $version;
 
                     // Unpack the archive
-                    if($this->Model->Backups->unpack($path . '.zip', $path)){
+                    if($this->Helper->Core->unpack($path . '.zip', $path)){
 
                         // Set the message
                         $message["data"]["path"] = $path;
@@ -420,7 +420,7 @@ class UpdaterEndpoint extends Endpoint {
                     $path = $this->Config->root() . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . $version;
 
                     // Copy the files to the root directory
-                    if($this->Model->Backups->copy($path, $this->Config->root())){
+                    if($this->Helper->Backups->copy($path, $this->Config->root())){
 
                         // Set the message
                         $message["data"]["path"] = $path;
@@ -491,7 +491,7 @@ class UpdaterEndpoint extends Endpoint {
                         $path = $this->Config->root() . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . $uuid;
 
                         // Unpack the backup archive
-                        if($this->Model->Backups->unpack($path . '.zip', $path)){
+                        if($this->Helper->Core->unpack($path . '.zip', $path)){
 
                             // Migrate the database
                             if($this->Model->Updater->migration($version, $uuid)){
@@ -675,10 +675,10 @@ class UpdaterEndpoint extends Endpoint {
                     if($this->Helper->Composer->clean()){
 
                         // Clean-up Backup
-                        if($this->Model->Backups->delete($this->Config->root() . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . $uuid)){
+                        if($this->Helper->Core->delete($this->Config->root() . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . $uuid)){
 
                             // Clean-up Backup
-                            if($this->Model->Backups->delete($this->Config->root() . DIRECTORY_SEPARATOR . 'tmp')){
+                            if($this->Helper->Core->delete($this->Config->root() . DIRECTORY_SEPARATOR . 'tmp')){
 
                                 // Set the message
                                 $message["data"]["message"] = $this->Locale->get("Clean-up completed");
