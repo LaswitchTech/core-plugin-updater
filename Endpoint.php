@@ -144,7 +144,7 @@ class UpdaterEndpoint extends Endpoint {
             if($this->Request->getMethod() == "POST"){
 
                 // Set the default message
-                $message["data"]["writable"] = is_writable($this->Config->root());
+                $message["data"]["writable"] = (is_writable($this->Config->root()) && is_writable($this->Config->root()) . DIRECTORY_SEPARATOR . '.composer');
                 $message["data"]["message"] = '';
                 if($message["data"]["writable"]){
                     $message["data"]["message"] .= $this->Locale->get("Root Directory Writable") . PHP_EOL;
