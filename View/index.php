@@ -142,10 +142,6 @@
     </div>
     <script>
 
-        // Set CSRF Token
-        var CSRF_KEY = "<?= $this->CSRF->key() ?>";
-        var CSRF_TOKEN = "<?= $this->CSRF->token() ?>";
-
         // Wait for document to load
         $(document).ready(function(){
 
