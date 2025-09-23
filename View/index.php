@@ -423,38 +423,26 @@
                                 // Start the spinner
                                 element.find('.spinner').addClass('spinner-25');
 
-                                // Create the data object
-                                var data = {};
-
                                 // Ajax Request
-                                $.ajax({
-                                    url: '/api/backups/init',
-                                    headers: {'X-CSRF-Authorization': CSRF_KEY},
-                                    type: 'POST',dataType: 'json',
-                                    data: data,
-                                    error: function(xhr, status, error){
+                                API.endpoint('/backups/init').execute(function(response){
 
-                                        // Reject the promise
-                                        reject(xhr.responseText);
-                                    },
-                                    success: function(response) {
+                                    // Update the metadata object
+                                    metadata["backup"] = {
+                                        "path": response.path,
+                                        "file": response.file,
+                                        "uuid": response.uuid,
+                                    };
 
-                                        // Update the metadata object
-                                        metadata["backup"] = {
-                                            "path": response.path,
-                                            "file": response.file,
-                                            "uuid": response.uuid,
-                                        };
+                                    // Show the message
+                                    element.find('pre').text(response.message);
 
-                                        // Show the message
-                                        element.find('pre').text(response.message);
+                                    // Update the spinner
+                                    element.find('.spinner').removeClass('spinner-25').addClass('spinner-100 success').html('<i class="check success"></i>');
 
-                                        // Update the spinner
-                                        element.find('.spinner').removeClass('spinner-25').addClass('spinner-100 success').html('<i class="check success"></i>');
-
-                                        // Resolve the promise
-                                        resolve();
-                                    }
+                                    // Resolve the promise
+                                    resolve();
+                                },function(xhr, status, error){
+                                    reject(error);
                                 });
                             });
                         } catch (error) {
